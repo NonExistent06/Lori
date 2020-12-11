@@ -6,10 +6,12 @@ const command = require('./command')
 
 client.on('ready', () => {
   console.log('The client is ready!')
-
-  command(client, ['ping', 'test'], (message) => {
-    message.channel.send('Pong!')
-  })
+  
+  client.on('message', message => {
+    if (message.content === '>ping') {  
+      message.channel.send(`Latency is ${Date.now() - message.createdTimestamp}ms. API Latency is ${Math.round(client.ws.ping)}ms`);
+    }
+  });
 
   command(client, 'servers', (message) => {
     client.guilds.cache.forEach((guild) => {
@@ -89,4 +91,3 @@ command(client, 'ban', (message) => {
   })
 
 client.login(config.token)
-
